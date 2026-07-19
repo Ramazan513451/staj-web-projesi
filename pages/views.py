@@ -46,9 +46,19 @@ class PageDeleteView(LoginRequiredMixin, DeleteView):
         messages.success(self.request, 'Sayfa başarıyla silindi.')
         return super().delete(request, *args, **kwargs)
 
+from sliders.models import Slider
+from services.models import Service
+
 # Public Views
 def index(request):
-    return render(request, 'index.html')
+    sliders = Slider.objects.filter(is_active=True).order_by('order')
+    featured_services = Service.objects.filter(is_featured=True).order_by('order')
+    
+    context = {
+        'sliders': sliders,
+        'services': featured_services,
+    }
+    return render(request, 'index.html', context)
 
 def contact(request):
     return render(request, 'contact.html')

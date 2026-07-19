@@ -67,7 +67,12 @@
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <i class="bi bi-building"></i> KURUMSAL A.Ş.
+                {% if site_settings and site_settings.logo %}
+                <img src="{{ site_settings.logo.url }}" alt="Logo" height="40" class="d-inline-block align-text-top me-2">
+                {% else %}
+                <i class="bi bi-building"></i> 
+                {% endif %}
+                {% if site_settings and site_settings.site_title %}{{ site_settings.site_title }}{% else %}KURUMSAL A.Ş.{% endif %}
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -95,21 +100,32 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 mb-3 mb-md-0">
-                    <h5>KURUMSAL A.Ş.</h5>
-                    <p class="mb-0">Adres: Örnek Mah. Teknoloji Cad. No:1, İstanbul</p>
-                    <p class="mb-0">Tel: +90 212 555 00 00</p>
-                    <p>Email: info@kurumsal.com</p>
+                    <h5>{% if site_settings and site_settings.site_title %}{{ site_settings.site_title }}{% else %}KURUMSAL A.Ş.{% endif %}</h5>
+                    <p class="mb-0">Adres: {% if site_settings and site_settings.address %}{{ site_settings.address }}{% else %}Örnek Mah. Teknoloji Cad. No:1, İstanbul{% endif %}</p>
+                    <p class="mb-0">Tel: {% if site_settings and site_settings.phone %}{{ site_settings.phone }}{% else %}+90 212 555 00 00{% endif %}</p>
+                    <p>Email: {% if site_settings and site_settings.email %}{{ site_settings.email }}{% else %}info@kurumsal.com{% endif %}</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <h5>Bizi Takip Edin</h5>
+                    {% if site_settings and site_settings.facebook_url %}
+                    <a href="{{ site_settings.facebook_url }}" class="me-3 fs-4" target="_blank"><i class="bi bi-facebook"></i></a>
+                    {% endif %}
+                    {% if site_settings and site_settings.instagram_url %}
+                    <a href="{{ site_settings.instagram_url }}" class="me-3 fs-4" target="_blank"><i class="bi bi-instagram"></i></a>
+                    {% endif %}
+                    {% if site_settings and site_settings.linkedin_url %}
+                    <a href="{{ site_settings.linkedin_url }}" class="fs-4" target="_blank"><i class="bi bi-linkedin"></i></a>
+                    {% endif %}
+                    {% if not site_settings or not site_settings.facebook_url and not site_settings.instagram_url and not site_settings.linkedin_url %}
                     <a href="#" class="me-3 fs-4"><i class="bi bi-facebook"></i></a>
                     <a href="#" class="me-3 fs-4"><i class="bi bi-instagram"></i></a>
                     <a href="#" class="fs-4"><i class="bi bi-linkedin"></i></a>
+                    {% endif %}
                 </div>
             </div>
             <div class="row mt-3">
                 <div class="col-12 text-center">
-                    <small>&copy; 2026 Kurumsal A.Ş. Tüm hakları saklıdır.</small>
+                    <small>&copy; {% now "Y" %} {% if site_settings and site_settings.site_title %}{{ site_settings.site_title }}{% else %}Kurumsal A.Ş.{% endif %}. Tüm hakları saklıdır.</small>
                 </div>
             </div>
         </div>

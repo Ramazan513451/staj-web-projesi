@@ -1,30 +1,39 @@
 {% extends "base.html" %}
 
-{% block title %}Ana Sayfa | Kurumsal A.Ş.{% endblock %}
+{% block title %}Ana Sayfa | {% if site_settings and site_settings.site_title %}{{ site_settings.site_title }}{% else %}Kurumsal A.Ş.{% endif %}{% endblock %}
 
 {% block content %}
 <!-- Slider -->
 <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+        {% for slider in sliders %}
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}"></button>
+        {% endfor %}
     </div>
     <div class="carousel-inner">
+        {% for slider in sliders %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            {% if slider.image %}
+            <img src="{{ slider.image.url }}" class="d-block w-100" style="object-fit: cover; height: 500px;" alt="{{ slider.title|default:'Slider' }}">
+            {% else %}
+            <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#555" dy=".3em">Görsel Yok</text></svg>
+            {% endif %}
+            
+            {% if slider.title or slider.subtitle %}
+            <div class="carousel-caption d-none d-md-block" style="background: rgba(0,0,0,0.5); border-radius: 10px; padding: 15px;">
+                {% if slider.title %}<h5>{{ slider.title }}</h5>{% endif %}
+                {% if slider.subtitle %}<p>{{ slider.subtitle }}</p>{% endif %}
+            </div>
+            {% endif %}
+        </div>
+        {% empty %}
         <div class="carousel-item active">
-            <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: İlk Slayt" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#555" dy=".3em">İlk Slayt Görseli</text></svg>
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Geleceği Birlikte İnşa Ediyoruz</h5>
-                <p>İnovatif çözümlerimizle sektörde öncüyüz.</p>
-            </div>
+             <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#555" dy=".3em">Hoş Geldiniz</text></svg>
         </div>
-        <div class="carousel-item">
-            <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: İkinci Slayt" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#666"></rect><text x="50%" y="50%" fill="#444" dy=".3em">İkinci Slayt Görseli</text></svg>
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Profesyonel Ekip, Güvenilir Hizmet</h5>
-                <p>Müşteri memnuniyeti odaklı çalışıyoruz.</p>
-            </div>
-        </div>
+        {% endfor %}
     </div>
+    
+    {% if sliders|length > 1 %}
     <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Önceki</span>
@@ -33,6 +42,7 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Sonraki</span>
     </button>
+    {% endif %}
 </div>
 
 <!-- Featured Services -->
@@ -40,36 +50,25 @@
     <div class="container">
         <h2 class="text-center mb-5">Öne Çıkan Hizmetlerimiz</h2>
         <div class="row g-4">
-            <!-- Service Card 1 -->
+            {% for service in services %}
             <div class="col-md-4">
                 <div class="card h-100 shadow-sm border-0">
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Hizmet 1" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Hizmet Görseli</text></svg>
+                    {% if service.image %}
+                    <img src="{{ service.image.url }}" class="card-img-top" style="object-fit: cover; height: 200px;" alt="{{ service.title }}">
+                    {% else %}
+                    <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Hizmet Görseli</text></svg>
+                    {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">Danışmanlık Hizmetleri</h5>
-                        <p class="card-text">İşletmenizin büyümesi için stratejik danışmanlık sunuyoruz.</p>
+                        <h5 class="card-title">{{ service.title }}</h5>
+                        <p class="card-text">{{ service.description|truncatewords:20 }}</p>
                     </div>
                 </div>
             </div>
-            <!-- Service Card 2 -->
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0">
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Hizmet 2" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Hizmet Görseli</text></svg>
-                    <div class="card-body">
-                        <h5 class="card-title">Yazılım Geliştirme</h5>
-                        <p class="card-text">İhtiyacınıza özel, modern ve güvenilir yazılım çözümleri.</p>
-                    </div>
-                </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted py-5">Yakında burada hizmetlerimiz listelenecek.</p>
             </div>
-            <!-- Service Card 3 -->
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0">
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Hizmet 3" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Hizmet Görseli</text></svg>
-                    <div class="card-body">
-                        <h5 class="card-title">Dijital Pazarlama</h5>
-                        <p class="card-text">Markanızı dijital dünyada öne çıkaracak yaratıcı kampanyalar.</p>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
