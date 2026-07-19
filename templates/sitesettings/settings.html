@@ -1,0 +1,121 @@
+{% extends 'panel/base_panel.html' %}
+
+{% block title %}Genel Ayarlar - Kurumsal CMS{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Genel Ayarlar</h2>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Site Başlığı <span class="text-danger">*</span></label>
+                    {{ form.site_title }}
+                    {% if form.site_title.errors %}
+                        <div class="text-danger small mt-1">{{ form.site_title.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Logo <span class="text-danger">*</span></label>
+                    {{ form.logo }}
+                    {% if form.logo.errors %}
+                        <div class="text-danger small mt-1">{{ form.logo.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Ana Renk (Primary Color)</label>
+                    {{ form.primary_color }}
+                    {% if form.primary_color.errors %}
+                        <div class="text-danger small mt-1">{{ form.primary_color.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Telefon <span class="text-danger">*</span></label>
+                    {{ form.phone }}
+                    {% if form.phone.errors %}
+                        <div class="text-danger small mt-1">{{ form.phone.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">E-posta <span class="text-danger">*</span></label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="text-danger small mt-1">{{ form.email.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Facebook URL</label>
+                    {{ form.facebook_url }}
+                    {% if form.facebook_url.errors %}
+                        <div class="text-danger small mt-1">{{ form.facebook_url.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Instagram URL</label>
+                    {{ form.instagram_url }}
+                    {% if form.instagram_url.errors %}
+                        <div class="text-danger small mt-1">{{ form.instagram_url.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">LinkedIn URL</label>
+                    {{ form.linkedin_url }}
+                    {% if form.linkedin_url.errors %}
+                        <div class="text-danger small mt-1">{{ form.linkedin_url.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Adres <span class="text-danger">*</span></label>
+                {{ form.address }}
+                {% if form.address.errors %}
+                    <div class="text-danger small mt-1">{{ form.address.errors.0 }}</div>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Harita iFrame Code</label>
+                {{ form.map_iframe }}
+                {% if form.map_iframe.errors %}
+                    <div class="text-danger small mt-1">{{ form.map_iframe.errors.0 }}</div>
+                {% endif %}
+                <small class="text-muted">Google Maps vb. servislerden aldığınız iframe kodunu yapıştırın.</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary"><i class="bi bi-save me-2"></i> Ayarları Kaydet</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

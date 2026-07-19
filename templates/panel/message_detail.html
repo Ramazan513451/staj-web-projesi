@@ -1,0 +1,55 @@
+{% extends 'panel/base_panel.html' %}
+
+{% block title %}Mesaj Detayı - Kurumsal CMS{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Mesaj Detayı</h2>
+    <a href="{% url 'message_list' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Geri Dön</a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">{{ message.name }}</h5>
+        <div>
+            {% if message.status == 'new' %}
+            <span class="badge bg-danger">Yeni</span>
+            {% elif message.status == 'read' %}
+            <span class="badge bg-success">Okundu</span>
+            {% else %}
+            <span class="badge bg-secondary">Arşivlendi</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-md-4 text-muted">E-posta:</div>
+            <div class="col-md-8"><a href="mailto:{{ message.email }}">{{ message.email }}</a></div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4 text-muted">Telefon:</div>
+            <div class="col-md-8">{{ message.phone|default:"Belirtilmemiş" }}</div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4 text-muted">Tarih:</div>
+            <div class="col-md-8">{{ message.created_at|date:"d.m.Y H:i" }}</div>
+        </div>
+        <hr>
+        <div class="mb-4">
+            <h6 class="text-muted mb-3">Mesaj İçeriği:</h6>
+            <div class="p-3 bg-light rounded border">
+                {{ message.message|linebreaks }}
+            </div>
+        </div>
+        
+        {% if message.status != 'archived' %}
+        <div class="d-flex justify-content-end">
+            <form action="{% url 'message_archive' message.pk %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning"><i class="bi bi-archive"></i> Arşivle</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
