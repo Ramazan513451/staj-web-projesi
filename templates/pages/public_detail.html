@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} | {% if site_settings and site_settings.site_title %}{{ site_settings.site_title }}{% else %}Kurumsal A.Ş.{% endif %}{% endblock %}
+
+{% block content %}
+<div class="bg-light py-5">
+    <div class="container text-center">
+        <h1 class="display-5 fw-bold">{{ page.title }}</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="page-content" style="line-height: 1.8; font-size: 1.1rem;">
+                {{ page.content|linebreaks }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

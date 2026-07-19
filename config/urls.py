@@ -23,6 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.index, name="index"),
     path("iletisim/", views.contact, name="contact"),
+    path("sayfa/<slug:slug>/", views.page_detail, name="page_detail"),
     path("panel/", include("accounts.urls")),
     path("panel/dashboard/", include("dashboard.urls")),
     path("panel/settings/", include("sitesettings.urls")),

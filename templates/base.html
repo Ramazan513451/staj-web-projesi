@@ -80,10 +80,15 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Ana Sayfa</a>
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">Ana Sayfa</a>
                     </li>
+                    {% for page in published_pages %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/iletisim/">İletişim</a>
+                        <a class="nav-link {% if request.path == '/sayfa/'|add:page.slug|add:'/' %}active{% endif %}" href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>
+                    </li>
+                    {% endfor %}
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/iletisim/' %}active{% endif %}" href="/iletisim/">İletişim</a>
                     </li>
                 </ul>
             </div>

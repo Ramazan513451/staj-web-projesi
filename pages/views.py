@@ -79,3 +79,9 @@ def contact(request):
         'form': form
     }
     return render(request, 'contact.html', context)
+
+from django.shortcuts import get_object_or_404
+
+def page_detail(request, slug):
+    page = get_object_or_404(Page, slug=slug, is_published=True)
+    return render(request, 'pages/public_detail.html', {'page': page})
