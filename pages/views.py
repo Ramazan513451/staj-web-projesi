@@ -60,5 +60,22 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
+from django.shortcuts import render, redirect
+from contactmessages.forms import ContactForm
+
 def contact(request):
-    return render(request, 'contact.html')
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            contact_message = form.save(commit=False)
+            contact_message.status = 'new'
+            contact_message.save()
+            messages.success(request, 'Mesajınız başarıyla alınmıştır. En kısa sürede size dönüş yapacağız.')
+            return redirect('contact')
+    else:
+        form = ContactForm()
+        
+    context = {
+        'form': form
+    }
+    return render(request, 'contact.html', context)
