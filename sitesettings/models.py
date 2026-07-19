@@ -15,6 +15,11 @@ class SiteSettings(models.Model):
     def save(self, *args, **kwargs):
         if SiteSettings.objects.exists() and not self.pk:
             self.pk = SiteSettings.objects.first().pk
+        
+        if self.logo:
+            from config.utils import optimize_image
+            self.logo = optimize_image(self.logo, max_width=800, quality=90)
+            
         super().save(*args, **kwargs)
 
     def __str__(self):

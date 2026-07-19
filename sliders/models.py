@@ -15,5 +15,11 @@ class Slider(models.Model):
                 raise ValidationError("En fazla 5 aktif slider olabilir.")
         super().clean()
 
+    def save(self, *args, **kwargs):
+        if self.image:
+            from config.utils import optimize_image
+            self.image = optimize_image(self.image)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.title if self.title else f"Slider {self.id}"
