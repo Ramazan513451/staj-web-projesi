@@ -1,73 +1,39 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Kurumsal Site{% endblock %}</title>
+    <title>{% block title %}{{ site_settings.site_title|default:"Kurumsal Site" }}{% endblock %}</title>
+    {% if site_settings and site_settings.logo %}
+    <link rel="icon" href="{{ site_settings.logo.url }}">
+    {% endif %}
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <style>
-        :root {
-            --primary-color: #1a73e8;
-            --text-color: #333;
-            --bg-light: #f8f9fa;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        main {
-            flex-grow: 1;
-        }
-        .navbar {
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,.1);
-        }
-        .navbar-brand {
-            font-weight: 700;
-            color: var(--primary-color) !important;
-        }
-        .nav-link {
-            font-weight: 500;
-        }
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        .btn-primary:hover {
-            background-color: #1557b0;
-            border-color: #1557b0;
-        }
-        .footer {
-            background-color: #343a40;
-            color: #fff;
-            padding: 2rem 0;
-            margin-top: auto;
-        }
-        .footer a {
-            color: #adb5bd;
-            text-decoration: none;
-        }
-        .footer a:hover {
-            color: #fff;
-        }
-        {% block extra_css %}{% endblock %}
-    </style>
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>
 
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <i class="bi bi-building"></i> KURUMSAL A.Ş.
+                {% if site_settings and site_settings.logo %}
+                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_title }}" height="40" class="d-inline-block align-text-top">
+                {% else %}
+                    <i class="bi bi-building"></i> {{ site_settings.site_title|default:"KURUMSAL A.Ş." }}
+                {% endif %}
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -78,7 +44,28 @@
                         <a class="nav-link" href="/">Ana Sayfa</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="/hizmetlerimiz/">Hizmetlerimiz</a>
+                    </li>
+                    {% if menu_pages %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="corporateDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Kurumsal
+                        </a>
+                        <ul class="dropdown-menu shadow-sm border-0" aria-labelledby="corporateDropdown">
+                            {% for m_page in menu_pages %}
+                            <li><a class="dropdown-item" href="{% url 'page_detail' m_page.slug %}">{{ m_page.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
                         <a class="nav-link" href="/iletisim/">İletişim</a>
+                    </li>
+                    <!-- Dark Mode Toggle -->
+                    <li class="nav-item ms-md-3 d-flex align-items-center">
+                        <button id="darkModeToggle" class="btn btn-outline-secondary rounded-circle" style="width: 40px; height: 40px; padding: 0;">
+                            <i class="bi bi-moon-fill" id="themeIcon"></i>
+                        </button>
                     </li>
                 </ul>
             </div>
@@ -95,28 +82,135 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6 mb-3 mb-md-0">
-                    <h5>KURUMSAL A.Ş.</h5>
-                    <p class="mb-0">Adres: Örnek Mah. Teknoloji Cad. No:1, İstanbul</p>
-                    <p class="mb-0">Tel: +90 212 555 00 00</p>
-                    <p>Email: info@kurumsal.com</p>
+                    <h5>{{ site_settings.site_title|default:"KURUMSAL A.Ş." }}</h5>
+                    <p class="mb-0">Adres: {{ site_settings.address|default:"Örnek Mah. Teknoloji Cad. No:1, İstanbul" }}</p>
+                    <p class="mb-0">Tel: {{ site_settings.phone|default:"+90 212 555 00 00" }}</p>
+                    <p>Email: {{ site_settings.email|default:"info@kurumsal.com" }}</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <h5>Bizi Takip Edin</h5>
-                    <a href="#" class="me-3 fs-4"><i class="bi bi-facebook"></i></a>
-                    <a href="#" class="me-3 fs-4"><i class="bi bi-instagram"></i></a>
-                    <a href="#" class="fs-4"><i class="bi bi-linkedin"></i></a>
+                    {% if site_settings %}
+                        {% if site_settings.facebook_url %}<a href="{{ site_settings.facebook_url }}" class="footer-icon" target="_blank"><i class="bi bi-facebook"></i></a>{% endif %}
+                        {% if site_settings.instagram_url %}<a href="{{ site_settings.instagram_url }}" class="footer-icon" target="_blank"><i class="bi bi-instagram"></i></a>{% endif %}
+                        {% if site_settings.linkedin_url %}<a href="{{ site_settings.linkedin_url }}" class="footer-icon" target="_blank"><i class="bi bi-linkedin"></i></a>{% endif %}
+                    {% else %}
+                        <a href="#" class="footer-icon"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="footer-icon"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="footer-icon"><i class="bi bi-linkedin"></i></a>
+                    {% endif %}
                 </div>
             </div>
             <div class="row mt-3">
                 <div class="col-12 text-center">
-                    <small>&copy; 2026 Kurumsal A.Ş. Tüm hakları saklıdır.</small>
+                    <small>&copy; {% now "Y" %} {{ site_settings.site_title|default:"Kurumsal A.Ş." }} Tüm hakları saklıdır.</small>
                 </div>
             </div>
         </div>
     </footer>
 
+    <!-- WhatsApp Float Button -->
+    {% if site_settings and site_settings.phone %}
+    <a href="https://wa.me/{{ site_settings.phone|cut:' ' }}" class="whatsapp-float" target="_blank" title="WhatsApp Destek">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+    {% endif %}
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTopBtn" title="Yukarı Çık"><i class="bi bi-arrow-up"></i></button>
+
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // AOS Init
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100,
+        });
+
+        // Dark Mode Logic
+        const toggleBtn = document.getElementById('darkModeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        
+        function setTheme(isDark) {
+            if (isDark) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeIcon.classList.replace('bi-moon-fill', 'bi-sun-fill');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                themeIcon.classList.replace('bi-sun-fill', 'bi-moon-fill');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Check saved theme or system preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            setTheme(true);
+        } else {
+            setTheme(false);
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            const isDark = document.documentElement.hasAttribute('data-theme');
+            setTheme(!isDark);
+        });
+
+        // Preloader Logic
+        window.addEventListener('load', function() {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                setTimeout(() => preloader.style.visibility = 'hidden', 500);
+            }
+        });
+
+        // Scroll to Top Logic
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        });
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Number Counter Logic
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+        
+        const startCounters = (entries, observer) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const counter = entry.target;
+                    const updateCount = () => {
+                        const target = +counter.getAttribute('data-target');
+                        const count = +counter.innerText;
+                        const inc = target / speed;
+                        
+                        if(count < target) {
+                            counter.innerText = Math.ceil(count + inc);
+                            setTimeout(updateCount, 15);
+                        } else {
+                            counter.innerText = target;
+                        }
+                    };
+                    updateCount();
+                    observer.unobserve(counter);
+                }
+            });
+        };
+        const counterObserver = new IntersectionObserver(startCounters, { threshold: 0.5 });
+        counters.forEach(counter => counterObserver.observe(counter));
+    </script>
+    
     {% block extra_js %}{% endblock %}
 </body>
 </html>

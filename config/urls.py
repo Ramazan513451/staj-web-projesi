@@ -17,10 +17,19 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
+from pages import views as page_views
+from services import views as service_views
+from django.conf import settings
+from django.conf.urls.static import static
 from pages import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", views.index, name="index"),
-    path("iletisim/", views.contact, name="contact"),
+    path("", page_views.index, name="index"),
+    path("hizmetlerimiz/", service_views.service_list, name="services"),
+    path("iletisim/", page_views.contact, name="contact"),
+    path("<slug:slug>/", views.page_detail, name="page_detail"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

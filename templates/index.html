@@ -6,10 +6,24 @@
 <!-- Slider -->
 <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+        {% for slider in sliders %}
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></button>
+        {% endfor %}
     </div>
     <div class="carousel-inner">
+        {% for slider in sliders %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            {% if slider.image %}
+            <img src="{{ slider.image.url }}" class="d-block w-100" alt="{{ slider.title }}">
+            {% else %}
+            <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Slayt" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#555" dy=".3em">Görsel Yok</text></svg>
+            {% endif %}
+            <div class="carousel-caption d-none d-md-block">
+                <h5>{{ slider.title }}</h5>
+                <p>{{ slider.subtitle }}</p>
+            </div>
+        </div>
+        {% empty %}
         <div class="carousel-item active">
             <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: İlk Slayt" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#555" dy=".3em">İlk Slayt Görseli</text></svg>
             <div class="carousel-caption d-none d-md-block">
@@ -17,13 +31,7 @@
                 <p>İnovatif çözümlerimizle sektörde öncüyüz.</p>
             </div>
         </div>
-        <div class="carousel-item">
-            <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: İkinci Slayt" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#666"></rect><text x="50%" y="50%" fill="#444" dy=".3em">İkinci Slayt Görseli</text></svg>
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Profesyonel Ekip, Güvenilir Hizmet</h5>
-                <p>Müşteri memnuniyeti odaklı çalışıyoruz.</p>
-            </div>
-        </div>
+        {% endfor %}
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -35,41 +43,54 @@
     </button>
 </div>
 
+<!-- Dynamic Stats Counter -->
+<section class="py-5" style="background: linear-gradient(135deg, var(--primary-color), #16213e); color: white;">
+    <div class="container">
+        <div class="row text-center" id="counterSection">
+            <div class="col-md-4 mb-4 mb-md-0" data-aos="fade-up" data-aos-delay="100">
+                <div class="display-4 fw-bold mb-2"><span class="counter" data-target="10">0</span>+</div>
+                <h5 class="fw-light" style="color: rgba(255,255,255,0.8);">Yıllık Tecrübe</h5>
+            </div>
+            <div class="col-md-4 mb-4 mb-md-0" data-aos="fade-up" data-aos-delay="200">
+                <div class="display-4 fw-bold mb-2"><span class="counter" data-target="150">0</span>+</div>
+                <h5 class="fw-light" style="color: rgba(255,255,255,0.8);">Başarılı Proje</h5>
+            </div>
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="display-4 fw-bold mb-2">%<span class="counter" data-target="99">0</span></div>
+                <h5 class="fw-light" style="color: rgba(255,255,255,0.8);">Müşteri Memnuniyeti</h5>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Featured Services -->
 <section class="py-5 bg-light">
     <div class="container">
-        <h2 class="text-center mb-5">Öne Çıkan Hizmetlerimiz</h2>
+        <h2 class="text-center mb-5" data-aos="fade-up">Öne Çıkan Hizmetlerimiz</h2>
         <div class="row g-4">
-            <!-- Service Card 1 -->
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0">
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Hizmet 1" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Hizmet Görseli</text></svg>
+            {% for service in services %}
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1 }}00">
+                <div class="card service-card">
+                    {% if service.image %}
+                    <img src="{{ service.image.url }}" class="card-img-top" alt="{{ service.title }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Hizmet" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Hizmet Görseli</text></svg>
+                    {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">Danışmanlık Hizmetleri</h5>
-                        <p class="card-text">İşletmenizin büyümesi için stratejik danışmanlık sunuyoruz.</p>
+                        <h5 class="card-title">{{ service.title }}</h5>
+                        <p class="card-text">{{ service.description|truncatewords:15 }}</p>
                     </div>
                 </div>
             </div>
-            <!-- Service Card 2 -->
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0">
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Hizmet 2" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Hizmet Görseli</text></svg>
-                    <div class="card-body">
-                        <h5 class="card-title">Yazılım Geliştirme</h5>
-                        <p class="card-text">İhtiyacınıza özel, modern ve güvenilir yazılım çözümleri.</p>
-                    </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <div class="p-5 bg-white rounded-4 shadow-sm" style="border: 1px dashed #ccc;">
+                    <i class="bi bi-tools text-muted mb-3" style="font-size: 3rem;"></i>
+                    <h4 class="text-muted">Geliştirme Aşamasında</h4>
+                    <p class="text-muted mb-0">Hizmetlerimiz en kısa sürede buraya eklenecektir.</p>
                 </div>
             </div>
-            <!-- Service Card 3 -->
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm border-0">
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Hizmet 3" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Hizmet Görseli</text></svg>
-                    <div class="card-body">
-                        <h5 class="card-title">Dijital Pazarlama</h5>
-                        <p class="card-text">Markanızı dijital dünyada öne çıkaracak yaratıcı kampanyalar.</p>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </section>

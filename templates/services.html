@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Hizmetlerimiz | Kurumsal A.Ş.{% endblock %}
+
+{% block content %}
+<div class="contact-header text-center" data-aos="fade-down">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-3">Tüm Hizmetlerimiz</h1>
+        <p class="lead" style="color: rgba(255,255,255,0.8);">İhtiyaçlarınıza özel, yenilikçi ve güvenilir kurumsal çözümler.</p>
+    </div>
+</div>
+
+<section class="py-5 bg-light">
+    <div class="container py-4">
+        <div class="row g-4">
+            {% for service in services %}
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1 }}00">
+                <div class="card service-card cursor-pointer h-100" data-bs-toggle="modal" data-bs-target="#serviceModal{{ service.id }}" style="cursor: pointer;">
+                    {% if service.image %}
+                    <img src="{{ service.image.url }}" class="card-img-top" alt="{{ service.title }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 250px;">
+                        <i class="bi bi-gear-fill" style="font-size: 4rem;"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h4 class="card-title fw-bold text-primary">{{ service.title }}</h4>
+                        <p class="card-text text-muted">{{ service.description|truncatewords:20 }}</p>
+                        <div class="text-end mt-3">
+                            <span class="text-secondary fw-bold">Detaylı İncele <i class="bi bi-arrow-right"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for Service Details -->
+            <div class="modal fade" id="serviceModal{{ service.id }}" tabindex="-1" aria-labelledby="serviceModalLabel{{ service.id }}" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content rounded-4 border-0 shadow-lg">
+                  <div class="modal-header border-0 pb-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body p-5 pt-3">
+                    <h2 class="fw-bold text-primary mb-4" id="serviceModalLabel{{ service.id }}">{{ service.title }}</h2>
+                    {% if service.image %}
+                    <img src="{{ service.image.url }}" class="img-fluid rounded-4 mb-4 shadow-sm w-100" alt="{{ service.title }}" style="max-height: 400px; object-fit: cover;">
+                    {% endif %}
+                    <div class="text-muted" style="line-height: 1.8; font-size: 1.1rem;">
+                        {{ service.description|linebreaks }}
+                    </div>
+                  </div>
+                  <div class="modal-footer border-0 justify-content-center pb-4">
+                    <a href="/iletisim/" class="btn btn-primary px-4 py-2">Bu Hizmetle İlgili Bize Ulaşın</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5" data-aos="zoom-in">
+                <div class="p-5 bg-white rounded-4 shadow-sm" style="border: 1px dashed #ccc;">
+                    <i class="bi bi-tools text-muted mb-3" style="font-size: 3rem;"></i>
+                    <h4 class="text-muted">Hizmetlerimiz Güncelleniyor</h4>
+                    <p class="text-muted mb-0">Lütfen daha sonra tekrar kontrol edin.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
