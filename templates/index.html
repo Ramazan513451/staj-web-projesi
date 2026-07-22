@@ -73,17 +73,45 @@
         <div class="row g-4">
             {% for service in services %}
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1 }}00">
-                <div class="card service-card">
+                <div class="card service-card h-100" data-bs-toggle="modal" data-bs-target="#serviceModal{{ service.id }}" style="cursor: pointer;">
                     {% if service.image %}
                     <img src="{{ service.image.url }}" class="card-img-top" alt="{{ service.title }}" style="height: 200px; object-fit: cover;">
                     {% else %}
-                    <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Hizmet" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Hizmet Görseli</text></svg>
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center card-img-top" style="height: 200px;">
+                        <i class="bi bi-gear-fill" style="font-size: 3rem;"></i>
+                    </div>
                     {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title">{{ service.title }}</h5>
+                        <h5 class="card-title text-primary">{{ service.title }}</h5>
                         <p class="card-text">{{ service.description|truncatewords:15 }}</p>
+                        <div class="text-end mt-3">
+                            <span class="text-secondary fw-bold" style="font-size: 0.9rem;">Detaylı İncele <i class="bi bi-arrow-right"></i></span>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Modal for Service Details -->
+            <div class="modal fade" id="serviceModal{{ service.id }}" tabindex="-1" aria-labelledby="serviceModalLabel{{ service.id }}" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content rounded-4 border-0 shadow-lg">
+                  <div class="modal-header border-0 pb-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body p-5 pt-3">
+                    <h2 class="fw-bold text-primary mb-4" id="serviceModalLabel{{ service.id }}">{{ service.title }}</h2>
+                    {% if service.image %}
+                    <img src="{{ service.image.url }}" class="img-fluid rounded-4 mb-4 shadow-sm w-100" alt="{{ service.title }}" style="max-height: 400px; object-fit: cover;">
+                    {% endif %}
+                    <div class="text-muted" style="line-height: 1.8; font-size: 1.1rem;">
+                        {{ service.description|linebreaks }}
+                    </div>
+                  </div>
+                  <div class="modal-footer border-0 justify-content-center pb-4">
+                    <a href="/iletisim/" class="btn btn-primary px-4 py-2">Bu Hizmetle İlgili Bize Ulaşın</a>
+                  </div>
+                </div>
+              </div>
             </div>
             {% empty %}
             <div class="col-12 text-center py-5">
