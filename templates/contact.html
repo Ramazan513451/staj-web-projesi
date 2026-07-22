@@ -40,7 +40,7 @@
             
             <!-- Map Placeholder -->
             {% if site_settings and site_settings.map_iframe %}
-            <div class="w-100" style="height: 300px; border-radius: 8px; overflow: hidden;">
+            <div class="w-100 map-wrapper" style="height: 300px; border-radius: 8px; overflow: hidden;">
                 {{ site_settings.map_iframe|safe }}
             </div>
             {% else %}
