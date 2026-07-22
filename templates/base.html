@@ -28,12 +28,13 @@
     <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand d-flex align-items-center" href="/">
                 {% if site_settings and site_settings.logo %}
-                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_title }}" height="40" class="d-inline-block align-text-top">
+                    <img src="{{ site_settings.logo.url }}" alt="{{ site_settings.site_title }}" height="40" class="me-2 d-inline-block align-text-top">
                 {% else %}
-                    <i class="bi bi-building"></i> {{ site_settings.site_title|default:"KURUMSAL A.Ş." }}
+                    <i class="bi bi-building me-2"></i>
                 {% endif %}
+                <span class="fs-5">{{ site_settings.site_title|default:"KURUMSAL A.Ş." }}</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
