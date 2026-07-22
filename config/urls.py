@@ -18,10 +18,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from pages import views
+from services import views as service_views
+from pages import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.index, name="index"),
+    path("hizmetlerimiz/", service_views.service_list, name="services"),
     path("iletisim/", views.contact, name="contact"),
     path("sayfa/<slug:slug>/", views.page_detail, name="page_detail"),
     path("panel/", include("accounts.urls")),
@@ -36,6 +39,7 @@ urlpatterns = [
 
 from django.conf import settings
 from django.conf.urls.static import static
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

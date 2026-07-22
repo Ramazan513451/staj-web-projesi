@@ -1,3 +1,9 @@
 from django.contrib import admin
+from .models import Slider
 
-# Register your models here.
+@admin.register(Slider)
+class SliderAdmin(admin.ModelAdmin):
+    list_display = ('title', 'order', 'is_active')
+    list_filter = ('is_active',)
+    search_fields = ('title', 'subtitle')
+    list_editable = ('order', 'is_active')

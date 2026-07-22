@@ -1,10 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Page
 from .forms import PageForm
+from sliders.models import Slider
+from services.models import Service
+from contactmessages.models import ContactMessage
+from contactmessages.forms import ContactForm
 
 class PageListView(LoginRequiredMixin, ListView):
     model = Page
@@ -52,16 +56,15 @@ from services.models import Service
 # Public Views
 def index(request):
     sliders = Slider.objects.filter(is_active=True).order_by('order')
-    featured_services = Service.objects.filter(is_featured=True).order_by('order')
-    
+    services = Service.objects.filter(is_featured=True).order_by('order')[:3]
+    if not services.exists():
+        services = Service.objects.all().order_by('-id')[:3]
+        
     context = {
         'sliders': sliders,
-        'services': featured_services,
+        'services': services,
     }
     return render(request, 'index.html', context)
-
-from django.shortcuts import render, redirect
-from contactmessages.forms import ContactForm
 
 def contact(request):
     if request.method == 'POST':
@@ -80,8 +83,6 @@ def contact(request):
     }
     return render(request, 'contact.html', context)
 
-from django.shortcuts import get_object_or_404
-
 def page_detail(request, slug):
     page = get_object_or_404(Page, slug=slug, is_published=True)
-    return render(request, 'pages/public_detail.html', {'page': page})
+    return render(request, 'page_detail.html', {'page': page})

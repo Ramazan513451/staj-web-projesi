@@ -44,3 +44,9 @@ class ServiceDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, 'Hizmet başarıyla silindi.')
         return super().delete(request, *args, **kwargs)
+
+from django.shortcuts import render
+
+def service_list(request):
+    services = Service.objects.all().order_by('order')
+    return render(request, 'services.html', {'services': services})

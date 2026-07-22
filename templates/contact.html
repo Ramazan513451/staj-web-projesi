@@ -4,10 +4,10 @@
 
 {% block content %}
 <!-- Page Header -->
-<div class="bg-light py-5">
-    <div class="container text-center">
-        <h1 class="display-5 fw-bold">İletişim</h1>
-        <p class="lead text-muted">Bizimle iletişime geçmek için aşağıdaki formu doldurabilir veya iletişim bilgilerimizi kullanabilirsiniz.</p>
+<div class="contact-header text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-3">İletişim</h1>
+        <p class="lead" style="color: rgba(255,255,255,0.8);">Bizimle iletişime geçmek için aşağıdaki formu doldurabilir veya iletişim bilgilerimizi kullanabilirsiniz.</p>
     </div>
 </div>
 
@@ -27,20 +27,20 @@
                 <div class="text-primary fs-4 me-3"><i class="bi bi-telephone-fill"></i></div>
                 <div>
                     <h5 class="mb-1">Telefon</h5>
-                    <p class="mb-0">{% if site_settings and site_settings.phone %}{{ site_settings.phone }}{% else %}+90 212 555 00 00{% endif %}</p>
+                    <p class="mb-0">{{ site_settings.phone|default:"+90 212 555 00 00" }}</p>
                 </div>
             </div>
             <div class="d-flex mb-4">
                 <div class="text-primary fs-4 me-3"><i class="bi bi-envelope-fill"></i></div>
                 <div>
                     <h5 class="mb-1">E-posta</h5>
-                    <p class="mb-0">{% if site_settings and site_settings.email %}{{ site_settings.email }}{% else %}info@kurumsal.com{% endif %}</p>
+                    <p class="mb-0">{{ site_settings.email|default:"info@kurumsal.com" }}</p>
                 </div>
             </div>
             
-            <!-- Map -->
+            <!-- Map Placeholder -->
             {% if site_settings and site_settings.map_iframe %}
-            <div class="w-100" style="border-radius: 8px; overflow: hidden;">
+            <div class="w-100" style="height: 300px; border-radius: 8px; overflow: hidden;">
                 {{ site_settings.map_iframe|safe }}
             </div>
             {% else %}
@@ -53,18 +53,17 @@
         <!-- Contact Form -->
         <div class="col-lg-6">
             <h3 class="mb-4">Bize Mesaj Gönderin</h3>
-            
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-            
-            <div class="card border-0 shadow-sm">
+            <div class="contact-card card border-0 shadow-sm">
                 <div class="card-body p-4">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
                     <form action="{% url 'contact' %}" method="POST">
                         {% csrf_token %}
                         
@@ -79,7 +78,6 @@
                                 {% endif %}
                             </div>
                         {% endfor %}
-                        
                         <button type="submit" class="btn btn-primary w-100 py-2">Mesaj Gönder</button>
                     </form>
                 </div>
