@@ -31,6 +31,7 @@ urlpatterns = [
     path("panel/pages/", include("pages.urls")),
     path("panel/sliders/", include("sliders.urls")),
     path("panel/messages/", include("contactmessages.urls")),
+    path("panel/logs/", include("auditlog.urls")),
 ]
 
 from django.conf import settings

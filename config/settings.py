@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "sliders",
     "contactmessages",
     "dashboard",
+    "auditlog",
 ]
 
 MIDDLEWARE = [
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "auditlog.middleware.RequestMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
