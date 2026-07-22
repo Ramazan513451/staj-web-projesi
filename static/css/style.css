@@ -474,3 +474,35 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--text-muted) !important;
 }
 
+/* Dark Mode Table Overrides */
+[data-theme="dark"] .table {
+    --bs-table-color: var(--text-dark);
+    --bs-table-bg: transparent;
+    --bs-table-border-color: rgba(255, 255, 255, 0.1);
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.05);
+    --bs-table-striped-color: var(--text-dark);
+    --bs-table-active-bg: rgba(255, 255, 255, 0.1);
+    --bs-table-active-color: var(--text-dark);
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.075);
+    --bs-table-hover-color: var(--text-dark);
+    color: var(--text-dark);
+}
+
+[data-theme="dark"] .table > :not(caption) > * > * {
+    background-color: transparent !important;
+    color: var(--text-dark) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Dark Mode Form Overrides */
+[data-theme="dark"] .form-control, [data-theme="dark"] .form-select {
+    background-color: #1a1a2e;
+    color: var(--text-dark);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .form-control:focus, [data-theme="dark"] .form-select:focus {
+    background-color: #16213e;
+    color: white;
+    border-color: var(--secondary-color);
+}
